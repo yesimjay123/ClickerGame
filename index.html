@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Speed Test</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom right, #ff6b6b, #f0a3a3);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #fff;
+        }
+        .game-box {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        #instructions {
+            font-size: 16px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px 0;
+            background: #fff;
+            color: #ff6b6b;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #ffdede;
+            color: #ff4a4a;
+        }
+        #timer, #score {
+            font-size: 20px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        #restartButton {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-box">
+        <h1>Click Speed Test</h1>
+        <p id="instructions">Click the button to start the game!</p>
+        <button id="clickButton" onclick="handleClick()">Click Me!</button>
+        <p id="timer">Time Left: 15s</p>
+        <p id="score">Score: 0</p>
+        <button id="restartButton" onclick="restartGame()">Restart</button>
+    </div>
+
+    <!-- Background Music -->
+    <audio id="backgroundMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-funnysong.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        let score = 0;
+        let timeLeft = 15;
+        let timer;
+        let gameStarted = false;
+
+        function handleClick() {
+            if (!gameStarted) {
+                gameStarted = true;
+                startTimer();
+                startMusic();
+            }
+            if (timeLeft > 0) {
+                score++;
+                document.getElementById('score').innerText = `Score: ${score}`;
+            }
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function startMusic() {
+            const music = document.getElementById('backgroundMusic');
+            music.play().catch((error) => {
+                console.error("Music playback error:", error);
+            });
+        }
+
+        function endGame() {
+            document.getElementById('instructions').innerText = "Time's up! Great job!";
+            document.getElementById('clickButton').style.display = 'none';
+            document.getElementById('restartButton').style.display = 'inline-block';
+        }
+
+        function restartGame() {
+            score = 0;
+            timeLeft = 15;
+            gameStarted = false;
+            document.getElementById('score').innerText = `Score: 0`;
+            document.getElementById('timer').innerText = `Time Left: 15s`;
+            document.getElementById('instructions').innerText = "Click the button to start the game!";
+            document.getElementById('clickButton').style.display = 'inline-block';
+            document.getElementById('restartButton').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
